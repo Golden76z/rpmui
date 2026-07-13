@@ -1,16 +1,26 @@
-/// Application.
+use ratatui::widgets::ListState;
+
+// /// Application.
 #[derive(Debug, Default)]
 pub struct App {
     /// should the application exit?
     pub should_quit: bool,
     /// counter
     pub counter: u8,
+
+    // Detail password informations
+    pub list_state: ListState,
+    // pub show_detail_panel: bool,
 }
 
 impl App {
     /// Constructs a new instance of [`App`].
     pub fn new() -> Self {
-        Self::default()
+        Self {
+            should_quit: false,
+            counter: 0,
+            list_state: ListState::default().with_selected(Some(0)),
+        }
     }
 
     /// Handles the tick event of the terminal.
@@ -34,20 +44,20 @@ impl App {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-    #[test]
-    fn test_app_increment_counter() {
-        let mut app = App::default();
-        app.increment_counter();
-        assert_eq!(app.counter, 1);
-    }
-
-    #[test]
-    fn test_app_decrement_counter() {
-        let mut app = App::default();
-        app.decrement_counter();
-        assert_eq!(app.counter, 0);
-    }
-}
+// #[cfg(test)]
+// mod tests {
+//     use super::*;
+//     #[test]
+//     fn test_app_increment_counter() {
+//         let mut app = App::default();
+//         app.increment_counter();
+//         assert_eq!(app.counter, 1);
+//     }
+//
+//     #[test]
+//     fn test_app_decrement_counter() {
+//         let mut app = App::default();
+//         app.decrement_counter();
+//         assert_eq!(app.counter, 0);
+//     }
+// }

@@ -1,23 +1,23 @@
 /// Application.
 pub mod app;
-
+pub mod constants;
 /// Terminal events handler.
 pub mod event;
-
-/// Widget renderer.
-pub mod ui;
-
 /// Terminal user interface.
 pub mod tui;
-
+/// Widget renderer.
+pub mod ui;
 /// Application updater.
 pub mod update;
-use app::App;
+
+// use app::App;
 use color_eyre::Result;
 use event::{Event, EventHandler};
-use ratatui::{backend::CrosstermBackend, Terminal};
+use ratatui::{Terminal, backend::CrosstermBackend};
 use tui::Tui;
-use update::update;
+
+use crate::{app::App, update::update};
+// use update::update;
 
 fn main() -> Result<()> {
     // Create an application.

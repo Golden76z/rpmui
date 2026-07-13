@@ -7,9 +7,11 @@ use ratatui::crossterm::{
     terminal::{self, EnterAlternateScreen, LeaveAlternateScreen},
 };
 
+use crate::{app::App, event::EventHandler, ui};
+
 pub type CrosstermTerminal = ratatui::Terminal<ratatui::backend::CrosstermBackend<std::io::Stderr>>;
 
-use crate::{app::App, event::EventHandler, ui};
+// use crate::{app::App, event::EventHandler, ui};
 
 /// Representation of a terminal user interface.
 ///
@@ -47,7 +49,6 @@ impl Tui {
         self.terminal.clear()?;
         Ok(())
     }
-
 
     /// [`Draw`] the terminal interface by [`rendering`] the widgets.
     ///
