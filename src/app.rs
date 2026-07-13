@@ -10,7 +10,7 @@ pub struct App {
 
     // Detail password informations
     pub list_state: ListState,
-    // pub show_detail_panel: bool,
+    pub show_detail_panel: bool,
 }
 
 impl App {
@@ -20,6 +20,7 @@ impl App {
             should_quit: false,
             counter: 0,
             list_state: ListState::default().with_selected(Some(0)),
+            show_detail_panel: false,
         }
     }
 
