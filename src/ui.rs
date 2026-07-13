@@ -31,13 +31,21 @@ pub fn render(app: &mut App, frame: &mut Frame) {
     ])
     .areas(area);
 
-    let [sidebar_left, main_content, sidebar_right] = Layout::horizontal([
-        Constraint::Length(30),
-        Constraint::Fill(1),
-        Constraint::Length(70),
-    ])
-    .areas(body);
-
+    // Geometry only: decide which regions exist. The detail panel is optional,
+    // so the right column comes back as `Option<Rect>` — `None` when hidden.
+    let (sidebar_left, main_content, sidebar_right) = if app.show_detail_panel {
+        let [l, m, r] = Layout::horizontal([
+            Constraint::Length(30),
+            Constraint::Fill(1),
+            Constraint::Length(70),
+        ])
+        .areas(body);
+        (l, m, Some(r))
+    } else {
+        let [l, m] =
+            Layout::horizontal([Constraint::Length(30), Constraint::Fill(1)]).areas(body);
+        (l, m, None)
+    };
     // Header render
     frame.render_widget(
         Paragraph::new(APP_TITLE_TEXT)
@@ -67,12 +75,14 @@ pub fn render(app: &mut App, frame: &mut Frame) {
         &mut app.list_state,
     );
 
-    // SIdebar right render
-    frame.render_widget(
-        Paragraph::new("").block(panel(SIDEBAR_RIGHT_TEXT)),
-        sidebar_right,
-    );
-
-    // Uniform grid layout
+    // Main content render
     frame.render_widget(Paragraph::new("").block(panel("")), main_content);
+
+    // Detail panel render — only when the layout produced a right column.
+    if let Some(right) = sidebar_right {
+        frame.render_widget(
+            Paragraph::new("").block(panel(SIDEBAR_RIGHT_TEXT)),
+            right,
+        );
+    }
 }

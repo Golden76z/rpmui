@@ -12,6 +12,7 @@ pub fn update(app: &mut App, key_event: KeyEvent) {
         // KeyCode::Left | KeyCode::Char('k') => app.decrement_counter(),
         KeyCode::Char('j') | KeyCode::Down => app.list_state.select_next(),
         KeyCode::Char('k') | KeyCode::Up => app.list_state.select_previous(),
+        KeyCode::Char('d') => app.show_detail_panel = !app.show_detail_panel,
         _ => {}
     };
 }
