@@ -1,5 +1,7 @@
 use ratatui::widgets::ListState;
 
+use crate::pages::layout::MenuItems;
+
 #[derive(Debug, Default)]
 pub enum Focus {
     #[default]
@@ -21,8 +23,8 @@ pub struct App {
     pub main_state: ListState,
     pub detail_state: ListState,
 
+    pub page_focus: MenuItems,
     pub show_detail_panel: bool,
-
     pub focus: Focus,
 }
 
@@ -33,9 +35,10 @@ impl App {
             should_quit: false,
             counter: 0,
             menu_state: ListState::default().with_selected(Some(0)),
-            main_state: ListState::default().with_selected(Some(0)),
-            detail_state: ListState::default().with_selected(Some(0)),
+            main_state: ListState::default(),
+            detail_state: ListState::default(),
             show_detail_panel: false,
+            page_focus: MenuItems::MainMenu,
             focus: Focus::Menu,
         }
     }

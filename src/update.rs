@@ -1,4 +1,7 @@
-use ratatui::crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
+use ratatui::{
+    crossterm::event::{KeyCode, KeyEvent, KeyModifiers},
+    widgets::ListState,
+};
 
 use crate::app::{App, Focus};
 
@@ -13,7 +16,10 @@ pub fn update(app: &mut App, key_event: KeyEvent) {
         KeyCode::Char('d') => {
             app.show_detail_panel = !app.show_detail_panel;
             match app.focus {
-                Focus::Detail => app.focus = Focus::Main,
+                Focus::Detail => {
+                    app.focus = Focus::Main;
+                    app.detail_state = ListState::default();
+                }
                 _ => {}
             }
         }
@@ -21,14 +27,24 @@ pub fn update(app: &mut App, key_event: KeyEvent) {
         // Changing tab focus
         KeyCode::Char('h') | KeyCode::Left => match app.focus {
             Focus::Menu => {}
-            Focus::Main => app.focus = Focus::Menu,
-            Focus::Detail => app.focus = Focus::Main,
+            Focus::Main => {
+                app.focus = Focus::Menu;
+                app.main_state = ListState::default();
+            }
+            Focus::Detail => {
+                app.focus = Focus::Main;
+                app.detail_state = ListState::default();
+            }
         },
         KeyCode::Char('l') | KeyCode::Right => match app.focus {
-            Focus::Menu => app.focus = Focus::Main,
+            Focus::Menu => {
+                app.focus = Focus::Main;
+                app.main_state = ListState::default().with_selected(Some(0));
+            }
             Focus::Main => {
                 if app.show_detail_panel {
-                    app.focus = Focus::Detail
+                    app.focus = Focus::Detail;
+                    app.detail_state = ListState::default().with_selected(Some(0));
                 }
             }
             Focus::Detail => {}

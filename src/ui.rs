@@ -1,16 +1,16 @@
 use ratatui::{
     Frame,
     layout::{Alignment, Constraint, Layout},
-    style::{Color, Modifier, Style},
-    widgets::{Block, BorderType, Borders, List, Paragraph},
+    style::{Color, Style},
+    widgets::{Block, BorderType, Borders},
 };
 
 use crate::{
     app::App,
-    constants::{APP_TITLE_TEXT, FOOTER_TEXT, SIDEBAR_LEFT_TEXT, SIDEBAR_RIGHT_TEXT},
+    pages::{details::render_details, layout::render_layout, main_block::render_main_block},
 };
 
-fn panel(title: &str) -> Block<'static> {
+pub fn panel(title: &str) -> Block<'static> {
     Block::default()
         .title(title.to_string())
         .title_alignment(Alignment::Center)
@@ -45,62 +45,13 @@ pub fn render(app: &mut App, frame: &mut Frame) {
         let [l, m] = Layout::horizontal([Constraint::Length(30), Constraint::Fill(1)]).areas(body);
         (l, m, None)
     };
-    // Header render
-    frame.render_widget(
-        Paragraph::new(APP_TITLE_TEXT)
-            .alignment(Alignment::Center)
-            .block(panel("")),
-        header,
-    );
 
-    // Footer render
-    frame.render_widget(
-        Paragraph::new(FOOTER_TEXT)
-            .alignment(Alignment::Center)
-            .block(panel("")),
-        footer,
-    );
+    // Rendering the layout (Header - Sidebar Left)
+    render_layout(app, frame, header, footer, sidebar_left);
 
-    // Sidebar left items
-    let menu_items = ["Main menu", "Generator", "Storage", "Settings"];
-    let menu_list = List::new(menu_items)
-        .style(Color::White)
-        .highlight_style(Modifier::REVERSED)
-        .highlight_symbol("> ");
-    // Sidebar left render
-    frame.render_stateful_widget(
-        menu_list.block(panel(SIDEBAR_LEFT_TEXT)),
-        sidebar_left,
-        &mut app.menu_state,
-    );
+    // Rendering the middle main block
+    render_main_block(app, frame, main_content);
 
-    // Main content items
-    let main_items = ["a", "b", "c", "d"];
-    let main_list = List::new(main_items)
-        .style(Color::White)
-        .highlight_style(Modifier::REVERSED)
-        .highlight_symbol("> ");
-
-    // Detail content items
-    let detail_items = ["a", "b", "c", "d"];
-    let detail_list = List::new(detail_items)
-        .style(Color::White)
-        .highlight_style(Modifier::REVERSED)
-        .highlight_symbol("> ");
-
-    // Main content render
-    frame.render_stateful_widget(
-        main_list.block(panel("")),
-        main_content,
-        &mut app.main_state,
-    );
-
-    // Detail panel render — only when the layout produced a right column.
-    if let Some(right) = sidebar_right {
-        frame.render_stateful_widget(
-            detail_list.block(panel(SIDEBAR_RIGHT_TEXT)),
-            right,
-            &mut app.detail_state,
-        );
-    }
+    // Rendering the details panel
+    render_details(app, frame, sidebar_right);
 }

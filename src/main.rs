@@ -3,6 +3,7 @@ pub mod app;
 pub mod constants;
 /// Terminal events handler.
 pub mod event;
+pub mod pages;
 /// Terminal user interface.
 pub mod tui;
 /// Widget renderer.
