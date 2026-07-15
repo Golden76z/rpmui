@@ -42,8 +42,7 @@ pub fn render(app: &mut App, frame: &mut Frame) {
         .areas(body);
         (l, m, Some(r))
     } else {
-        let [l, m] =
-            Layout::horizontal([Constraint::Length(30), Constraint::Fill(1)]).areas(body);
+        let [l, m] = Layout::horizontal([Constraint::Length(30), Constraint::Fill(1)]).areas(body);
         (l, m, None)
     };
     // Header render
@@ -63,26 +62,45 @@ pub fn render(app: &mut App, frame: &mut Frame) {
     );
 
     // Sidebar left items
-    let items = ["Main menu", "Generator", "Storage", "Settings"];
-    let list = List::new(items)
+    let menu_items = ["Main menu", "Generator", "Storage", "Settings"];
+    let menu_list = List::new(menu_items)
         .style(Color::White)
         .highlight_style(Modifier::REVERSED)
         .highlight_symbol("> ");
     // Sidebar left render
     frame.render_stateful_widget(
-        list.block(panel(SIDEBAR_LEFT_TEXT)),
+        menu_list.block(panel(SIDEBAR_LEFT_TEXT)),
         sidebar_left,
-        &mut app.list_state,
+        &mut app.menu_state,
     );
 
+    // Main content items
+    let main_items = ["a", "b", "c", "d"];
+    let main_list = List::new(main_items)
+        .style(Color::White)
+        .highlight_style(Modifier::REVERSED)
+        .highlight_symbol("> ");
+
+    // Detail content items
+    let detail_items = ["a", "b", "c", "d"];
+    let detail_list = List::new(detail_items)
+        .style(Color::White)
+        .highlight_style(Modifier::REVERSED)
+        .highlight_symbol("> ");
+
     // Main content render
-    frame.render_widget(Paragraph::new("").block(panel("")), main_content);
+    frame.render_stateful_widget(
+        main_list.block(panel("")),
+        main_content,
+        &mut app.main_state,
+    );
 
     // Detail panel render — only when the layout produced a right column.
     if let Some(right) = sidebar_right {
-        frame.render_widget(
-            Paragraph::new("").block(panel(SIDEBAR_RIGHT_TEXT)),
+        frame.render_stateful_widget(
+            detail_list.block(panel(SIDEBAR_RIGHT_TEXT)),
             right,
+            &mut app.detail_state,
         );
     }
 }

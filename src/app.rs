@@ -1,5 +1,13 @@
 use ratatui::widgets::ListState;
 
+#[derive(Debug, Default)]
+pub enum Focus {
+    #[default]
+    Menu,
+    Main,
+    Detail,
+}
+
 // /// Application.
 #[derive(Debug, Default)]
 pub struct App {
@@ -8,9 +16,14 @@ pub struct App {
     /// counter
     pub counter: u8,
 
-    // Detail password informations
-    pub list_state: ListState,
+    // List states
+    pub menu_state: ListState,
+    pub main_state: ListState,
+    pub detail_state: ListState,
+
     pub show_detail_panel: bool,
+
+    pub focus: Focus,
 }
 
 impl App {
@@ -19,8 +32,11 @@ impl App {
         Self {
             should_quit: false,
             counter: 0,
-            list_state: ListState::default().with_selected(Some(0)),
+            menu_state: ListState::default().with_selected(Some(0)),
+            main_state: ListState::default().with_selected(Some(0)),
+            detail_state: ListState::default().with_selected(Some(0)),
             show_detail_panel: false,
+            focus: Focus::Menu,
         }
     }
 
@@ -31,34 +47,4 @@ impl App {
     pub fn quit(&mut self) {
         self.should_quit = true;
     }
-
-    pub fn increment_counter(&mut self) {
-        if let Some(res) = self.counter.checked_add(1) {
-            self.counter = res;
-        }
-    }
-
-    pub fn decrement_counter(&mut self) {
-        if let Some(res) = self.counter.checked_sub(1) {
-            self.counter = res;
-        }
-    }
 }
-
-// #[cfg(test)]
-// mod tests {
-//     use super::*;
-//     #[test]
-//     fn test_app_increment_counter() {
-//         let mut app = App::default();
-//         app.increment_counter();
-//         assert_eq!(app.counter, 1);
-//     }
-//
-//     #[test]
-//     fn test_app_decrement_counter() {
-//         let mut app = App::default();
-//         app.decrement_counter();
-//         assert_eq!(app.counter, 0);
-//     }
-// }
