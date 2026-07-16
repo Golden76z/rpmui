@@ -64,7 +64,6 @@ pub fn render_layout(
 
     // Sidebar left items
     let menu_items = MenuItems::ALL.map(|p| p.title());
-    // let menu_items = ["Main menu", "Generator", "Storage", "Settings"];
     let menu_list = List::new(menu_items)
         .style(Color::White)
         .highlight_style(Modifier::REVERSED)

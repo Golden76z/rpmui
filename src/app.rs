@@ -1,6 +1,6 @@
 use ratatui::widgets::ListState;
 
-use crate::pages::layout::MenuItems;
+use crate::pages::{generator::Generator, layout::MenuItems};
 
 #[derive(Debug, Default)]
 pub enum Focus {
@@ -26,6 +26,9 @@ pub struct App {
     pub page_focus: MenuItems,
     pub show_detail_panel: bool,
     pub focus: Focus,
+
+    // Page content structs
+    pub generator: Generator,
 }
 
 impl App {
@@ -40,6 +43,7 @@ impl App {
             show_detail_panel: false,
             page_focus: MenuItems::MainMenu,
             focus: Focus::Menu,
+            generator: Generator::new(),
         }
     }
 
